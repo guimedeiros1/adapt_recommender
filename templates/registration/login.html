@@ -7,11 +7,13 @@
 <body>
 {% block content %}
   <h2>Login</h2>
-  <form method="post">
+  <form action="/recommender/home/" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Login</button>
   </form>
 {% endblock %}
+<br>
+<a href="/recommender/new_user/">New user?</a>
 </body>
 </html>

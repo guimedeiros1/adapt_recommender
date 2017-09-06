@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Learner</title>
+</head>
+<body>
+<h1>{{ user.first_name }} Learner Features</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/recommender/{{ user.pk }}/register_learner/" method="post">
+{% csrf_token %}
+    Your Age: <input type="number" name="user_age" required><br>
+    Level of Education:
+    <select name="level_of_education" required>
+        <option value="EF">Middle School</option>
+        <option value="EM">High School</option>
+        <option value="ES">Graduate</option>
+        <option value="MT">Master</option>
+        <option value="DT">Ph.D.</option>
+    </select><br>
+    Level of English:
+    <select name="level_of_english" required>
+        <option value="LL">Low Level</option>
+        <option value="ML">Medium Level</option>
+        <option value="HL">High Level</option>
+    </select><br>
+    Level of Literature:
+    <select name="level_of_literature" required>
+        <option value="LL">Low Level</option>
+        <option value="ML">Medium Level</option>
+        <option value="HL">High Level</option>
+    </select><br>
+    Level of History:
+    <select name="level_of_history" required>
+        <option value="LL">Low Level</option>
+        <option value="ML">Medium Level</option>
+        <option value="HL">High Level</option>
+    </select><br>
+    Level of Biology:
+    <select name="level_of_biology" required>
+        <option value="LL">Low Level</option>
+        <option value="ML">Medium Level</option>
+        <option value="HL">High Level</option>
+    </select><br>
+    Level of Physics:
+    <select name="level_of_physics" required>
+        <option value="LL">Low Level</option>
+        <option value="ML">Medium Level</option>
+        <option value="HL">High Level</option>
+    </select><br>
+    Level of Math:
+    <select name="level_of_math" required>
+        <option value="LL">Low Level</option>
+        <option value="ML">Medium Level</option>
+        <option value="HL">High Level</option>
+    </select><br>
+    Learning Goal:
+    <select name="learning_goal" required>
+        <option value="STL">Short-time Learning</option>
+        <option value="LLL">Life-long Learning</option>
+    </select><br>
+    Learning Style:
+    <select name="learning_style" required>
+        <option value="SQN">Sequential</option>
+        <option value="GLB">Global</option>
+    </select><br><br>
+<input type="submit" value="Submit" />
+</form>
+</body>
+</html>

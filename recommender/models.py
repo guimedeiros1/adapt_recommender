@@ -1,14 +1,15 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from time import strftime
 
 # Create your models here.
 
+class User(AbstractUser):
+    pass
 
-class User(models.Model):
-    user_first_name = models.CharField(max_length=100)
-    user_last_name = models.CharField(max_length=200)
-    user_email = models.EmailField(max_length=100)
-    user_age = models.IntegerField()
+class Learner(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_age = models.IntegerField(null=True, blank=True)
 
     FUNDAMENTAL = "EF"
     MEDIO = "EM"
@@ -26,6 +27,7 @@ class User(models.Model):
 
     level_of_education = models.CharField(max_length=2,
                                           choices=LEVELS_OF_EDUCATION_CHOICES,
+                                          null=True, blank=True,
                                           )
     LOW = "LL"
     MEDIUM = "ML"
@@ -39,21 +41,27 @@ class User(models.Model):
 
     level_of_english = models.CharField(max_length=3,
                                         choices=LEVELS_OF_KNOWLEDGE_CHOICES,
+                                        null=True, blank=True,
                                         )
     level_of_literature = models.CharField(max_length=3,
                                            choices=LEVELS_OF_KNOWLEDGE_CHOICES,
+                                           null=True, blank=True,
                                            )
     level_of_history = models.CharField(max_length=3,
                                         choices=LEVELS_OF_KNOWLEDGE_CHOICES,
+                                        null=True, blank=True,
                                         )
     level_of_biology = models.CharField(max_length=3,
                                         choices=LEVELS_OF_KNOWLEDGE_CHOICES,
+                                        null=True, blank=True,
                                         )
     level_of_physics = models.CharField(max_length=3,
                                         choices=LEVELS_OF_KNOWLEDGE_CHOICES,
+                                        null=True, blank=True,
                                         )
     level_of_math = models.CharField(max_length=3,
                                      choices=LEVELS_OF_KNOWLEDGE_CHOICES,
+                                     null=True, blank=True,
                                      )
 
     SHORT_TERM = "STL"
@@ -68,6 +76,7 @@ class User(models.Model):
                                      choices=LEARNING_GOAL_CHOICES,
                                      help_text="""'Aprendizagem a curto prazo' = aprender sobre um tópico específico;
                                                'Aprendizagem vitalícia' = aprender mais sobre uma matéria;""",
+                                     null=True, blank=True,
                                      )
 
     #Felder and solomon
@@ -87,9 +96,10 @@ class User(models.Model):
                                       choices=LEARNING_STYLE_CHOICES,
                                       help_text=""""Aprendizagem sequencial = aprende linearmente (ex. lê um livro na sequência capítulo 1,2,3...)
                                                     Aprendizagem global = aprende pulando conteúdo (ex. lê o livro em ordem randômica cap. 1,5,3,9...)""",
+                                      null=True, blank=True,
                                       )
     def __str__(self):
-        return self.user_first_name
+        return 'User %s - Learner %s' % (self.user_id, self.pk)
 
 
 class Movie(models.Model):
@@ -121,7 +131,7 @@ class Movie(models.Model):
 
 
 class Rating(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(Learner, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True, blank=True)
     predicted_rating = models.IntegerField(null=True, blank=True)

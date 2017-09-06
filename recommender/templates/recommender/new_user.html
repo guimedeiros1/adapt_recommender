@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New User</title>
+</head>
+<body>
+<h1>User Registration Form</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/recommender/register/" method="post">
+{% csrf_token %}
+    User name: <input type="text" name="username"><br>
+    First name: <input type="text" name="firstname"><br>
+    Last name: <input type="text" name="lastname"><br>
+    Email: <input type="email" name="email"><br>
+    Password: <input type="password" name="password"><br>
+<input type="submit" value="Next" />
+</form>
+</body>
+</html>
