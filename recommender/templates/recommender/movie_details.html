@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ movie.movie_name }}</title>
+</head>
+<body>
+<figure>
+    <img src={{ movie.movie_pic.url }} height="220"> <br>
+    <figcaption>{{ movie.movie_name }}</figcaption>
+</figure>
+<strong>Description: </strong> {{ movie.movie_description }} <br> <br>
+<strong>Knwoledge Area: </strong> {{ movie.movie_knowledge_area }} <br> <br>
+<strong>Recommended Age: </strong> {{ movie.movie_recommended_age }}
+</body>
+</html>
