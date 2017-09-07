@@ -8,7 +8,7 @@ class User(AbstractUser):
     pass
 
 class Learner(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_fk = models.OneToOneField(User, on_delete=models.CASCADE)
     user_age = models.IntegerField(null=True, blank=True)
 
     FUNDAMENTAL = "EF"
@@ -99,7 +99,7 @@ class Learner(models.Model):
                                       null=True, blank=True,
                                       )
     def __str__(self):
-        return 'User %s - Learner %s' % (self.user_id, self.pk)
+        return 'User %s - Learner %s' % (self.user_fk_id, self.pk)
 
 
 class Movie(models.Model):

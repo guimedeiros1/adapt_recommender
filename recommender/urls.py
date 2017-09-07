@@ -6,8 +6,8 @@ from . import views
 urlpatterns = [
     #ex: /recommender/
     url(r'^$', views.index, name='index'),
-    # ex: /recommender/login/
-    url(r'^login/$', views.login, name='login'),
+    # # ex: /recommender/login/
+    # url(r'^login/$', views.login, name='login'),
     # ex: /recommender/home/
     url(r'^home/$', views.home, name='home'),
     # ex: /recommender/register/
@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^(?P<user_id>[0-9]+)/recommendation/$', views.recommendation, name='recommendation'),
     # ex: /recommender/5/movie_detail/
     url(r'^(?P<movie_id>[0-9]+)/movie_detail/$', views.movie_detail, name='recommendation'),
+    # ex: /recommender/logout/
+    url(r'^logout_view/$', views.logout_view, name='logout_view'),
 ]
