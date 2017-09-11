@@ -6,13 +6,46 @@
 </head>
 <body>
 <h1>Please rate movies you already seen {{ user.first_name }}</h1>
+
+{#Get current position MODIFICAR PARA SALVAR AS COORDENADAS AO INVES DE IMPRIMI-LAS#}
+<p id="preferences"></p>
+
+<script>
+var x = document.getElementById("preferences");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    x.innerHTML = "Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude;
+}
+
+window.onload = getLocation();
+
+</script>
+
+{#Show the movies and get the first ratings#}
+
 {% if movie_list %}
-    <ul>
-    {% for movie in movie_list %}
-        <li> <img src={{ movie.movie_pic.url }} height="220"> <br>
-        <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a></li>
-    {% endfor %}
-    </ul>
+    <form action="/recommender/{{ learner.id }}/register_preferences/" method="post">
+        {% csrf_token %}
+        <ul>
+            {% for movie in movie_list %}
+                <li>
+                    <img src={{ movie.movie_pic.url }} height="220"> <br>
+                    <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a> <br>
+                    <p>Rating: <input type="range" size="2" name={{ movie.id }} min="1" max="5">(1-5)</p> <br>
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="submit" value="Rate Movies!" />
+    </form>
 {% else %}
     <p>No movies are available.</p>
 {% endif %}

@@ -19,11 +19,13 @@ urlpatterns = [
     # ex: /recommender/5/register_learner/
     url(r'^(?P<user_id>[0-9]+)/register_learner/$', views.register_learner, name='register_learner'),
     # ex: /recommender/5/preferences
-    url(r'^(?P<user_id>[0-9]+)/preferences/$', views.preferences, name='preferences'),
+    url(r'^(?P<learner_id>[0-9]+)/preferences/$', views.preferences, name='preferences'),
     # ex: /recommender/5/recommendation/
-    url(r'^(?P<user_id>[0-9]+)/recommendation/$', views.recommendation, name='recommendation'),
+    url(r'^(?P<learner_id>[0-9]+)/recommendation/$', views.recommendation, name='recommendation'),
     # ex: /recommender/5/movie_detail/
     url(r'^(?P<movie_id>[0-9]+)/movie_detail/$', views.movie_detail, name='recommendation'),
     # ex: /recommender/logout/
     url(r'^logout_view/$', views.logout_view, name='logout_view'),
+    # ex: /recommender/5/register_rating/
+    url(r'^(?P<learner_id>[0-9]+)/register_preferences/$', views.register_preferences, name='register_preferences'),
 ]
