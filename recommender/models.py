@@ -105,8 +105,12 @@ class Learner(models.Model):
 
 class Movie(models.Model):
     movie_name = models.CharField(max_length=200)
-    movie_description = models.TextField(max_length=1000)
-    movie_pic = models.ImageField(upload_to='pics/')
+    movie_description = models.TextField(max_length=2000)
+    rationale = models.TextField(max_length=2000, null=True, blank=True)
+    benefits = models.TextField(max_length=2000, null=True, blank=True)
+    problems = models.TextField(max_length=2000, null=True, blank=True)
+    objectives = models.TextField(max_length=2000, null=True, blank=True)
+    movie_pic = models.ImageField(upload_to='pics/', null=True, blank=True)
 
     ENGLISH = "EN"
     LITERATURE = "LT"
@@ -124,8 +128,8 @@ class Movie(models.Model):
         (MATH, "Matémática"),
     )
     movie_knowledge_area = models.CharField(max_length=2,
-                                            choices=KNOWLEDGE_AREA_CHOICES)
-    movie_recommended_age = models.IntegerField()
+                                            choices=KNOWLEDGE_AREA_CHOICES, null=True, blank=True)
+    movie_recommended_age = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.movie_name
@@ -135,7 +139,7 @@ class Rating(models.Model):
     learner = models.ForeignKey(Learner, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True, blank=True)
-    predicted_rating = models.IntegerField(null=True, blank=True)
+    predicted_rating = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True)
     context_time = models.DateTimeField('Date Rated', auto_now_add=True, null=True, blank=True)
     long = models.DecimalField(max_digits=8, decimal_places=6, null=True, blank=True)
     lat = models.DecimalField(max_digits=8, decimal_places=6, null=True, blank=True)

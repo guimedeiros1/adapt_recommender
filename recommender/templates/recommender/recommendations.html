@@ -5,17 +5,64 @@
     <title>Recomendations for {{ user.user_first_name }}</title>
 </head>
 <body>
+{#Get current position and sends it by an AJAX POST to register preferences view#}
+<p id="recommendations"></p>
+
+<script>
+var x = document.getElementById("recommendations");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+{#MODIFICAR ESSA FUNÇÃO PARA ENVIAR A LATITUDE E A LONGITUDE#}
+function sendPosition(position) {
+    x.innerHTML = "Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude;
+}
+
+window.onload = getLocation();
+
+</script>
+
+<h1>List of Recommended Movies</h1>
 {% if list_recommended_movies %}
+     <form action="/recommender/{{ learner.id }}/register_preferences/" method="post">
+        {% csrf_token %}
+        <ul>
+        {% for movie, rating in list_recommended_movies %}
+            <li>
+                <img src={{ movie.movie_pic.url }} height="220"> <br>
+                <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+                <p>Predicted Rating: {{ rating.predicted_rating }}</p>
+                <p>Rating: <input type="range" size="2" name={{ movie.id }} min="1" max="5">(1-5)</p> <br>
+            </li>
+        {% endfor %}
+        </ul>
+    <input type="submit" value="Rate Movies!" />
+    </form>
+{% else %}
+    <p>No movies are available.</p>
+{% endif %}
+
+<h1>List of Seen Movies</h1>
+{% if list_seen_movies %}
     <ul>
-    {% for movie in list_recommended_movies %}
-        <li> <img src={{ movie.movie_pic.url }} height="220"> <br>
-        <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a></li>
-{#        Colocar também o rating previsto#}
+    {% for movie, rating in list_seen_movies %}
+        <li>
+            <img src={{ movie.movie_pic.url }} height="220"> <br>
+            <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+            <p>Rating: {{ rating.rating }}</p>
+        </li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No movies are available.</p>
 {% endif %}
+
 <br><br><br> <a href="/recommender/logout_view/">Logout</a>
 </body>
 </html>

@@ -7,7 +7,7 @@
 <body>
 <h1>Please rate movies you already seen {{ user.first_name }}</h1>
 
-{#Get current position MODIFICAR PARA SALVAR AS COORDENADAS AO INVES DE IMPRIMI-LAS#}
+{#Get current position and sends it by an AJAX POST to register preferences view#}
 <p id="preferences"></p>
 
 <script>
@@ -15,13 +15,13 @@ var x = document.getElementById("preferences");
 
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(sendPosition);
     } else {
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
 }
-
-function showPosition(position) {
+{#MODIFICAR ESSA FUNÇÃO PARA ENVIAR A LATITUDE E A LONGITUDE#}
+function sendPosition(position) {
     x.innerHTML = "Latitude: " + position.coords.latitude +
     "<br>Longitude: " + position.coords.longitude;
 }

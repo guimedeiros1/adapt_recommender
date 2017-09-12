@@ -83,6 +83,8 @@ DATABASES = {
     }
 }
 
+LOGIN_URL = '/login/'
+
 #where the login redirects
 LOGIN_REDIRECT_URL = '/recommender/home/'
 

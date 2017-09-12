@@ -5,11 +5,18 @@
     <title>{{ movie.movie_name }}</title>
 </head>
 <body>
-<figure>
-    <img src={{ movie.movie_pic.url }} height="220"> <br>
-    <figcaption>{{ movie.movie_name }}</figcaption>
-</figure>
+{%  if movie.movie_pic.url is not None %}
+    <figure>
+        <img src={{ movie.movie_pic.url }} height="220"> <br>
+        <figcaption>{{ movie.movie_name }}</figcaption>
+    </figure>
+{% endif %}
+
 <strong>Description: </strong> {{ movie.movie_description }} <br> <br>
+<strong>Rationale: </strong> {{ movie.rationale }} <br> <br>
+<strong>Benefits: </strong> {{ movie.benefits }} <br> <br>
+<strong>Problems: </strong> {{ movie.problems }} <br> <br>
+<strong>Objectives: </strong> {{ movie.objectives }} <br> <br>
 <strong>Knwoledge Area: </strong> {{ movie.movie_knowledge_area }} <br> <br>
 <strong>Recommended Age: </strong> {{ movie.movie_recommended_age }}
 <br><br><br> <a href="/recommender/logout_view/">Logout</a>
