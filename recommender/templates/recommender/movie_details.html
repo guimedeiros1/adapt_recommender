@@ -19,6 +19,19 @@
 <strong>Objectives: </strong> {{ movie.objectives }} <br> <br>
 <strong>Knwoledge Area: </strong> {{ movie.movie_knowledge_area }} <br> <br>
 <strong>Recommended Age: </strong> {{ movie.movie_recommended_age }}
+
+<h1>Similar movies:</h1>
+<ul>
+    {% for movie in list_similar_movies %}
+        <li>
+        {%  if movie.movie_pic.url is not None %}
+            <img src={{ movie.movie_pic.url }} height="220"> <br>
+        {% endif %}
+            <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a> <br>
+        </li>
+    {% endfor %}
+</ul>
+
 <br><br><br> <a href="/recommender/logout_view/">Logout</a>
 </body>
 </html>

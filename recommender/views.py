@@ -6,10 +6,11 @@ from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from .algorithms.populate_bd import PopulateBd
+from .algorithms.content_similarity import ContentSimilarity
 
 from .models import Movie, Learner, Rating, User
 
-# Create your views here.
+
 # @login_required
 def index(request):
     if Movie.objects.all() is None:
@@ -19,8 +20,6 @@ def index(request):
     context = {'movie_list' : movies}
     return render(request, 'recommender/index.html', context)
 
-# def login(request):
-#     return HttpResponse("Esta é a página de login")
 
 def new_user(request):
     return render(request, 'recommender/new_user.html')
@@ -32,46 +31,63 @@ def register(request):
     user.save()
     return HttpResponseRedirect('/login/')
 
+@login_required
 def new_learner(request, user_id):
-    if request.user.is_authenticated():
-        user = User.objects.get(pk=user_id)
-        context = {'user' : user}
-        return render(request, 'recommender/new_learner.html', context)
-    else:
-        return HttpResponse("User must be logged to see this page!")
+    user = User.objects.get(pk=user_id)
+    context = {'user' : user}
+    return render(request, 'recommender/new_learner.html', context)
 
+@login_required
 def register_learner(request, user_id):
-    if request.user.is_authenticated():
-        learner = Learner.objects.create(user_fk=User.objects.get(pk=user_id))
-        # learner.user = user_id
-        learner.user_age = request.POST['user_age']
-        learner.level_of_education = request.POST['level_of_education']
-        learner.level_of_english = request.POST['level_of_english']
-        learner.level_of_literature = request.POST['level_of_literature']
-        learner.level_of_history = request.POST['level_of_history']
-        learner.level_of_biology = request.POST['level_of_biology']
-        learner.level_of_physics = request.POST['level_of_physics']
-        learner.level_of_math = request.POST['level_of_math']
-        learner.learning_goal = request.POST['learning_goal']
-        learner.learning_style = request.POST['learning_style']
-        learner.save()
-        url = reverse('preferences', kwargs={'learner_id': learner.pk})
-        return HttpResponseRedirect(url)
-    else:
-        return HttpResponse("User must be logged to see this page!")
+    learner = Learner.objects.create(user_fk=User.objects.get(pk=user_id))
+    learner.user_age = request.POST['user_age']
+    learner.level_of_education = request.POST['level_of_education']
+    learner.level_of_english = request.POST['level_of_english']
+    learner.level_of_literature = request.POST['level_of_literature']
+    learner.level_of_history = request.POST['level_of_history']
+    learner.level_of_biology = request.POST['level_of_biology']
+    learner.level_of_physics = request.POST['level_of_physics']
+    learner.level_of_math = request.POST['level_of_math']
+    learner.learning_goal = request.POST['learning_goal']
+    learner.learning_style = request.POST['learning_style']
+    learner.save()
+    url = reverse('preferences', kwargs={'learner_id': learner.pk})
+    return HttpResponseRedirect(url)
 
 @login_required
 def preferences(request, learner_id):
-    # num_movies = Movie.objects.all().count()
-    # rand_movies = random.sample(range(num_movies), 2)
-    movies = Movie.objects.order_by('movie_name')
+    num_movies = Movie.objects.all().count()
+    rand_movies = random.sample(range(num_movies), 20) #select 20 ids randomly
+    movies = Movie.objects.filter(id__in=rand_movies) #filter the set of movies to be between such random ids
     learner = Learner.objects.get(pk=learner_id)
     user = User.objects.get(pk=learner.user_fk_id) #get the user from the learner_id
+
     context = {'movie_list': movies,
                'user': user,
                'learner': learner}
-    # url = reverse('preferences', kwargs={'user_id':user_id})
     return render(request, 'recommender/preferences.html', context)
+
+@login_required
+def register_preferences(request, learner_id):
+    learner = Learner.objects.get(pk=learner_id)
+    learner_movie_set = learner.rating_set.all()
+    rated_movies = list(request.POST.items())
+
+    if learner_movie_set.count() == 0:
+        for key, value in rated_movies[1:]: #skip first element because it is user token information
+            rating = Rating.objects.create(learner=learner, movie=Movie.objects.get(pk=key))
+            rating.rating = int(value)
+            rating.save()
+        url = reverse('recommendation', kwargs={'learner_id': learner_id})
+        return HttpResponseRedirect(url)
+    else:
+        for key, value in rated_movies[1:]:  # skip first element because it is user token information
+            rating = Rating.objects.get(movie=key, learner=learner_id)
+            rating.rating = int(value)
+            rating.context_time = datetime.now()
+            rating.save()
+        url = reverse('recommendation', kwargs={'learner_id': learner_id})
+        return HttpResponseRedirect(url)
 
 @login_required
 def recommendation(request, learner_id):
@@ -95,9 +111,11 @@ def recommendation(request, learner_id):
 @login_required
 def movie_detail(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
-    context = {'movie' : movie}
+    ls = ContentSimilarity()
+    list_similar_movies = ls.content_similarity(movie_id)
+    context = {'movie' : movie,
+               'list_similar_movies' : list_similar_movies}
     return render(request, 'recommender/movie_details.html', context)
-
 
 def home(request):
     username = request.POST['username']
@@ -107,8 +125,8 @@ def home(request):
         if user.is_active:
             login(request, user)
             num_results = Learner.objects.filter(user_fk=user).count()
-            if num_results > 0: #verifies if the user has already setted a learner foreign key
-                url = reverse('recommendation', kwargs={'learner_id': user.learner.pk})
+            if num_results > 0: #check if the user hasn't already filled out the learner form
+                url = reverse('preferences', kwargs={'learner_id': user.learner.pk})
                 return HttpResponseRedirect(url)
             else:
                 url = reverse('new_learner', kwargs={'user_id': user.pk})
@@ -125,25 +143,3 @@ def logout_view(request):
     logout(request)
     url = reverse('login')
     return HttpResponseRedirect(url)
-
-@login_required
-def register_preferences(request, learner_id):
-    learner = Learner.objects.get(pk=learner_id)
-    learner_movie_set = learner.rating_set.all()
-    rated_movies = list(request.POST.items())
-
-    if learner_movie_set.count() == 0:
-        for key, value in rated_movies[1:]: #skip first element because it is user token information
-            rating = Rating.objects.create(learner=learner, movie=Movie.objects.get(pk=key))
-            rating.rating = int(value)
-            rating.save()
-        url = reverse('recommendation', kwargs={'learner_id': learner_id})
-        return HttpResponseRedirect(url)
-    else:
-        for key, value in rated_movies[1:]:  # skip first element because it is user token information
-            rating = Rating.objects.get(movie=key, learner=learner_id)
-            rating.rating = int(value)
-            rating.context_time = datetime.now()
-            rating.save()
-        url = reverse('recommendation', kwargs={'learner_id': learner_id})
-        return HttpResponseRedirect(url)

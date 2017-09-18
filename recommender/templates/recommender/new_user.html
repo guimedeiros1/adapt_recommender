@@ -11,11 +11,30 @@
 
 <form action="/recommender/register/" method="post">
 {% csrf_token %}
-    User name: <input type="text" name="username"><br>
-    First name: <input type="text" name="firstname"><br>
-    Last name: <input type="text" name="lastname"><br>
-    Email: <input type="email" name="email"><br>
-    Password: <input type="password" name="password"><br>
+    <p>
+        <label for="id_username">Username: </label>
+        <input id="id_username" autofocus="" maxlength="254" type="text" name="username">
+    </p>
+
+    <p>
+        <label for="id_firstname">First name: </label>
+        <input id="id_firstname" autofocus="" maxlength="254" type="text" name="firstname">
+    </p>
+
+    <p>
+        <label for="id_lastname">Last name: </label>
+        <input id="id_lastname" autofocus="" maxlength="254" type="text" name="lastname">
+    </p>
+
+    <p>
+        <label for="id_email">Email: </label>
+        <input id="id_email" autofocus="" maxlength="254" type="email" name="email">
+    </p>
+
+    <p>
+        <label for="id_password">Password: </label>
+        <input id="id_password" autofocus="" maxlength="254" type="password" name="password">
+    </p>
 <input type="submit" value="Next" />
 </form>
 </body>
