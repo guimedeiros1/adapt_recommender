@@ -7,6 +7,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from .algorithms.populate_bd import PopulateBd
 from .algorithms.content_similarity import ContentSimilarity
+from .algorithms.sgd import FactMatrix
 
 from .models import Movie, Learner, Rating, User
 

@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from recommender.models import Movie
 
 class ContentSimilarity:
-
+    # MELHORIA FUTURA: SALVAR MOST SIMILAR NO BD E ATUALIZAR SOMENTE QDO NECESSÁRIO
     def content_similarity(self, movie_id):
         #transform the Movie QuerySet into a pandas DataFrame
         movies = pd.DataFrame(list(Movie.objects.all().values()))
