@@ -7,6 +7,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from .algorithms.populate_bd import PopulateBd
 from .algorithms.content_similarity import ContentSimilarity
+from django.db import IntegrityError
 from .algorithms.sgd import FactMatrix
 
 from .models import Movie, Learner, Rating, User
@@ -26,10 +27,13 @@ def new_user(request):
     return render(request, 'recommender/new_user.html')
 
 def register(request):
-    user = User.objects.create_user(username=request.POST['username'], email=request.POST['email'], password=request.POST['password'])
-    user.first_name=request.POST['firstname']
-    user.last_name=request.POST['lastname']
-    user.save()
+    try:
+        user = User.objects.create_user(username=request.POST['username'], email=request.POST['email'], password=request.POST['password'])
+        user.first_name=request.POST['firstname']
+        user.last_name=request.POST['lastname']
+        user.save()
+    except IntegrityError:
+        return HttpResponse('User already exists!')
     return HttpResponseRedirect('/login/')
 
 @login_required
@@ -40,20 +44,23 @@ def new_learner(request, user_id):
 
 @login_required
 def register_learner(request, user_id):
-    learner = Learner.objects.create(user_fk=User.objects.get(pk=user_id))
-    learner.user_age = request.POST['user_age']
-    learner.level_of_education = request.POST['level_of_education']
-    learner.level_of_english = request.POST['level_of_english']
-    learner.level_of_literature = request.POST['level_of_literature']
-    learner.level_of_history = request.POST['level_of_history']
-    learner.level_of_biology = request.POST['level_of_biology']
-    learner.level_of_physics = request.POST['level_of_physics']
-    learner.level_of_math = request.POST['level_of_math']
-    learner.learning_goal = request.POST['learning_goal']
-    learner.learning_style = request.POST['learning_style']
-    learner.save()
-    url = reverse('preferences', kwargs={'learner_id': learner.pk})
-    return HttpResponseRedirect(url)
+    try:
+        learner = Learner.objects.create(user_fk=User.objects.get(pk=user_id))
+        learner.user_age = request.POST['user_age']
+        learner.level_of_education = request.POST['level_of_education']
+        learner.level_of_english = request.POST['level_of_english']
+        learner.level_of_literature = request.POST['level_of_literature']
+        learner.level_of_history = request.POST['level_of_history']
+        learner.level_of_biology = request.POST['level_of_biology']
+        learner.level_of_physics = request.POST['level_of_physics']
+        learner.level_of_math = request.POST['level_of_math']
+        learner.learning_goal = request.POST['learning_goal']
+        learner.learning_style = request.POST['learning_style']
+        learner.save()
+        url = reverse('preferences', kwargs={'learner_id': learner.pk})
+        return HttpResponseRedirect(url)
+    except IntegrityError:
+        HttpResponse('Learner already exists!')
 
 @login_required
 def preferences(request, learner_id):
@@ -91,9 +98,19 @@ def register_preferences(request, learner_id):
         return HttpResponseRedirect(url)
 
 @login_required
-def recommendation(request, learner_id):
+def recommendation(request, learner_id): #Integrar algoritmo de fatoração de matrizes
     learner = Learner.objects.get(pk=learner_id)
     rated_movies = learner.rating_set.order_by('-predicted_rating') #get the set of movies ordered by user predicted rating
+
+    filmescomrating = rated_movies.count()
+
+    todososfilmes = Movie.objects.all().count()
+
+
+    if rated_movies.count() < Movie.objects.all().count(): #checks if the prediction algorithm has alredy been executed for this user
+        url = reverse('populate_ratings', kwargs={'learner_id': learner_id})
+        return HttpResponseRedirect(url)
+
     list_recommended_movies = []
     list_seen_movies = []
     for mv in rated_movies:
@@ -107,6 +124,31 @@ def recommendation(request, learner_id):
                'user' : request.user,
                'learner' : learner,}
     return render(request, 'recommender/recommendations.html', context)
+
+def populate_ratings(request, learner_id): #proposta de melhoria -> atualizar somente as notas do aprendiz de interesse (learner_id)
+    fm = FactMatrix()
+    R_hat = fm.sgd()
+    usr = int(learner_id)
+
+    # for usr in range(1, R_hat.shape[0]):
+    for item in range(1, R_hat.shape[1]):
+
+        learner = Learner.objects.filter(pk=usr)
+        movie = Movie.objects.filter(pk=item)
+
+        if learner.count() > 0 and movie.count() > 0:
+            rating = Rating.objects.filter(learner=learner, movie=movie) #try to retrieve the rating object
+
+            if rating.count() == 0: #check if the rating already exists
+                rating = Rating.objects.create(learner=Learner.objects.get(pk=usr), movie=Movie.objects.get(pk=item))
+                rating.predicted_rating = R_hat.loc[usr, item]
+                rating.save()
+            else:
+                rating.predicted_rating = R_hat.loc[usr, item]
+        elif learner.count() == 0:
+            break
+    url = reverse('recommendation', kwargs={'learner_id': learner_id})
+    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -127,7 +169,10 @@ def home(request):
             login(request, user)
             num_results = Learner.objects.filter(user_fk=user).count()
             if num_results > 0: #check if the user hasn't already filled out the learner form
-                url = reverse('preferences', kwargs={'learner_id': user.learner.pk})
+                if Rating.objects.filter(learner=user.learner).count() > 0: #check if the learner has already rated any movies
+                    url = reverse('recommendation', kwargs={'learner_id': user.learner.pk})
+                else:
+                    url = reverse('preferences', kwargs={'learner_id': user.learner.pk})
                 return HttpResponseRedirect(url)
             else:
                 url = reverse('new_learner', kwargs={'user_id': user.pk})

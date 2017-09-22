@@ -7,6 +7,8 @@ from datetime import datetime
 
 class User(AbstractUser):
     pass
+    def __str__(self):
+        return 'Id - %s - Name - %s' % (self.id, self.username)
 
 class Learner(models.Model):
     user_fk = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -132,17 +134,17 @@ class Movie(models.Model):
     movie_recommended_age = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.movie_name
+        return '%s - %s' % (self.id, self.movie_name)
 
 
 class Rating(models.Model):
     learner = models.ForeignKey(Learner, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True, blank=True)
-    predicted_rating = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True)
+    predicted_rating = models.DecimalField(max_digits=8, decimal_places=6,null=True, blank=True)
     context_time = models.DateTimeField('Date Rated', auto_now_add=True, null=True, blank=True)
     long = models.DecimalField(max_digits=8, decimal_places=6, null=True, blank=True)
     lat = models.DecimalField(max_digits=8, decimal_places=6, null=True, blank=True)
 
     def __str__(self):
-        return 'User %s - Movie %s' % (self.learner_id, self.movie_id)
+        return 'Learner %s - Movie %s' % (self.learner_id, self.movie_id)

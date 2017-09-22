@@ -5,12 +5,15 @@ from recommender.models import Rating
 
 class FactMatrix:
 
-    def sgd(self,user_id):
+    def sgd(self):
         # transform the Rating QuerySet into a pandas DataFrame
         df = pd.DataFrame(list(Rating.objects.all().values()))
 
-        n_users = df.learner.unique().shape[0]
-        n_items = df.movie.unique().shape[0]
+        #################VERIFICAR PORQUE ESTÁ PEGANDO 403 FILMES AO INVÉS DE 407
+        n_users = df.learner_id.max() #get the max user id
+        n_items = df.movie_id.max()
+
+        df = df.dropna(subset=['rating'])  # drop the lines where the user has not given a rating to the film (rating == NaN)
 
         train_data, test_data = train_test_split(df,test_size=0.25)
 
@@ -18,23 +21,23 @@ class FactMatrix:
         test_data = pd.DataFrame(test_data)
 
         # Create training and test matrix
-        R = np.zeros((n_users, n_items))
+        R = np.zeros((n_users+1, n_items+1)) #it is add +1 to match the bd indices
         for line in train_data.itertuples():
-            R[line[1], line[2]] = line[3]
+            R[line[4], line[6]] = line[8] #line[4] is the user_id // line[6] is the movie_id // line[8] is the user atributed rating
 
-        T = np.zeros((n_users, n_items))
+        T = np.zeros((n_users+1, n_items+1))
         for line in test_data.itertuples():
-            T[line[1], line[2]] = line[3]
+            T[line[4], line[6]] = line[8]
 
         # Index matrix for training data
         I = R.copy()
         I[I > 0] = 1
-        I[I == 0] = 0
+        # I[I == 0] = 0
 
         # Index matrix for test data
         I2 = T.copy()
         I2[I2 > 0] = 1
-        I2[I2 == 0] = 0
+        # I2[I2 == 0] = 0
 
         # Predict the unknown ratings through the dot product of the latent features for users and items
         def prediction(P,Q):
@@ -44,7 +47,7 @@ class FactMatrix:
         lmbda = 0.1 # Regularisation weight
         k = 20  # Dimensionality of the latent feature space
         m, n = R.shape  # Number of users and items
-        n_epochs = 100  # Number of epochs
+        n_epochs = 1  # Number of epochs
         gamma=0.01  # Learning rate
 
         P = 3 * np.random.rand(k,m) # Latent user feature matrix
@@ -83,13 +86,14 @@ class FactMatrix:
         # plt.show()
 
         # Calculate prediction matrix R_hat (low-rank approximation for R)
-        R = pd.DataFrame(R)
+        # R = pd.DataFrame(R)
         R_hat=pd.DataFrame(prediction(P,Q))
 
+        return R_hat
 
-        # Compare true ratings of user 17 with predictions
-        ratings = pd.DataFrame(data=R.loc[int(user_id),R.loc[int(user_id),:] > 0]).head(n=5)
-        ratings['Prediction'] = R_hat.loc[int(user_id),R.loc[int(user_id),:] > 0]
-        ratings.columns = ['Actual Rating', 'Predicted Rating']
-        return ratings
+        # # Compare true ratings of user 17 with predictions
+        # ratings = pd.DataFrame(data=R.loc[int(user_id),R.loc[int(user_id),:] > 0]).head(n=5)
+        # ratings['Prediction'] = R_hat.loc[int(user_id),R.loc[int(user_id),:] > 0]
+        # ratings.columns = ['Actual Rating', 'Predicted Rating']
+        # return ratings
 
