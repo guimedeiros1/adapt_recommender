@@ -102,11 +102,6 @@ def recommendation(request, learner_id): #Integrar algoritmo de fatoração de m
     learner = Learner.objects.get(pk=learner_id)
     rated_movies = learner.rating_set.order_by('-predicted_rating') #get the set of movies ordered by user predicted rating
 
-    filmescomrating = rated_movies.count()
-
-    todososfilmes = Movie.objects.all().count()
-
-
     if rated_movies.count() < Movie.objects.all().count(): #checks if the prediction algorithm has alredy been executed for this user
         url = reverse('populate_ratings', kwargs={'learner_id': learner_id})
         return HttpResponseRedirect(url)
@@ -124,6 +119,11 @@ def recommendation(request, learner_id): #Integrar algoritmo de fatoração de m
                'user' : request.user,
                'learner' : learner,}
     return render(request, 'recommender/recommendations.html', context)
+
+def get_ratings(request, learner_id):
+    context = {'learner_id': learner_id
+               }
+    return render(request, 'recommender/populate_ratings.html', context)
 
 def populate_ratings(request, learner_id): #proposta de melhoria -> atualizar somente as notas do aprendiz de interesse (learner_id)
     fm = FactMatrix()

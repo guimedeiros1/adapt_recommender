@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from recommender.models import Rating
+from recommender.models import Rating, Movie, Learner
 
 class FactMatrix:
 
@@ -9,9 +9,11 @@ class FactMatrix:
         # transform the Rating QuerySet into a pandas DataFrame
         df = pd.DataFrame(list(Rating.objects.all().values()))
 
-        #################VERIFICAR PORQUE ESTÁ PEGANDO 403 FILMES AO INVÉS DE 407
-        n_users = df.learner_id.max() #get the max user id
-        n_items = df.movie_id.max()
+        latest_movie = Movie.objects.latest('id') #get the latest movie object included in db
+        latest_learner = Learner.objects.latest('id') #get the latest learning included in db
+
+        n_users = latest_learner.id #get the max user id
+        n_items = latest_movie.id #get the max movie id
 
         df = df.dropna(subset=['rating'])  # drop the lines where the user has not given a rating to the film (rating == NaN)
 
@@ -47,7 +49,7 @@ class FactMatrix:
         lmbda = 0.1 # Regularisation weight
         k = 20  # Dimensionality of the latent feature space
         m, n = R.shape  # Number of users and items
-        n_epochs = 1  # Number of epochs
+        n_epochs = 50  # Number of epochs
         gamma=0.01  # Learning rate
 
         P = 3 * np.random.rand(k,m) # Latent user feature matrix
