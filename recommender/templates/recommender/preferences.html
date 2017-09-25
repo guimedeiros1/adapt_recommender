@@ -2,11 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-{#    <link rel="stylesheet" type="text/css" href="star.css">#}
     <title>Adptive Recommender System</title>
 </head>
+<style>
+    .rating {
+        display: inline-block;
+        position: relative;
+        height: 30px;
+        line-height: 30px;
+        font-size: 30px;
+    }
+
+    .rating label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .rating label:last-child {
+        position: static;
+    }
+
+    .rating label:nth-child(1) {
+        z-index: 5;
+    }
+
+    .rating label:nth-child(2) {
+        z-index: 4;
+    }
+
+    .rating label:nth-child(3) {
+        z-index: 3;
+    }
+
+    .rating label:nth-child(4) {
+        z-index: 2;
+    }
+
+    .rating label:nth-child(5) {
+        z-index: 1;
+    }
+
+    .rating label input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+
+    .rating label .icon {
+        float: left;
+        color: transparent;
+    }
+
+    .rating label:last-child .icon {
+        color: #b4b4b4;
+    }
+
+    .rating:not(:hover) label input:checked ~ .icon,
+    .rating:hover label:hover input ~ .icon {
+        color: #fff928;
+    }
+
+    .rating label input:focus:not(:checked) ~ .icon:last-child {
+        color: #b4b4b4;
+        text-shadow: 0 0 5px #fff928;
+    }
+</style>
 <body>
 <h1>Please rate movies you already seen {{ user.first_name }}</h1>
+
+<h3>Please try to vote the maximum number of movies</h3>
+<p>PS. You can always go back and forth to see the movie descriptions and vote</p>
 
 {#Get current position and sends it by an AJAX POST to register preferences view#}
 <p id="preferences"></p>
@@ -31,6 +100,12 @@ window.onload = getLocation();
 
 </script>
 
+<script>
+    $(':radio').change(function() {
+      console.log('New star rating: ' + this.value);
+    });
+</script>
+
 {#Show the movies and get the first ratings#}
 
 {% if movie_list %}
@@ -43,23 +118,43 @@ window.onload = getLocation();
                     <img src={{ movie.movie_pic.url }} height="220"> <br>
                 {% endif %}
                     <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a> <br>
-                   <p>Rating: <input type="range" size="2" name={{ movie.id }} min="1" max="5">(1-5)</p> <br>
-{#                    <fieldset class="rating">#}
-{#                        <input type="radio" id="star5" name={{ movie.id }} value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>#}
-{#                        <input type="radio" id="star4half" name={{ movie.id }} value="4" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>#}
-{#                        <input type="radio" id="star4" name={{ movie.id }} value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>#}
-{#                        <input type="radio" id="star3half" name={{ movie.id }} value="3" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>#}
-{#                        <input type="radio" id="star3" name={{ movie.id }} value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>#}
-{#                        <input type="radio" id="star2half" name={{ movie.id }} value="2" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>#}
-{#                        <input type="radio" id="star2" name={{ movie.id }} value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>#}
-{#                        <input type="radio" id="star1half" name={{ movie.id }} value="1" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>#}
-{#                        <input type="radio" id="star1" name={{ movie.id }} value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>#}
-{#                        <input type="radio" id="starhalf" name={{ movie.id }} value="1" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>#}
-{#                    </fieldset>#}
+{#                   <p>Rating: <input type="range" size="2" name={{ movie.id }} min="1" max="5">(1-5)</p> <br>#}
+                    <div class="rating">
+                          <label>
+                            <input type="radio" name={{ movie.id }} value="1" />
+                            <span class="icon">★</span>
+                          </label>
+                          <label>
+                            <input type="radio" name={{ movie.id }} value="2" />
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                          </label>
+                          <label>
+                            <input type="radio" name={{ movie.id }} value="3" />
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                          </label>
+                          <label>
+                            <input type="radio" name={{ movie.id }} value="4" />
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                          </label>
+                          <label>
+                            <input type="radio" name={{ movie.id }} value="5" />
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                            <span class="icon">★</span>
+                          </label>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
-        <input type="submit" value="Rate Movies!" />
+        <input type="submit" value="Get my Recommendations!" />
     </form>
 {% else %}
     <p>No movies are available.</p>
