@@ -100,10 +100,18 @@ window.onload = getLocation();
 
 </script>
 
+{#Control the rating stars#}
 <script>
     $(':radio').change(function() {
       console.log('New star rating: ' + this.value);
     });
+</script>
+
+{#Reload the page#}
+<script>
+    function reloadPage() {
+        location.reload();
+    }
 </script>
 
 {#Show the movies and get the first ratings#}
@@ -156,6 +164,7 @@ window.onload = getLocation();
         </ul>
         <input type="submit" value="Get my Recommendations!" />
     </form>
+    <button onclick="reloadPage()">Show me other movies!</button>
 {% else %}
     <p>No movies are available.</p>
 {% endif %}
