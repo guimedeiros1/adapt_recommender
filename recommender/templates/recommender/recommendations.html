@@ -107,50 +107,97 @@ window.onload = getLocation();
     <div style="width:100%; height:600px; overflow: auto">
         <form action="/recommender/{{ learner.id }}/register_preferences/" method="post">
             {% csrf_token %}
-            <ul>
-            {% for movie, rating in list_recommended_movies %}
-                <li>
-                    {%  if movie.movie_pic.url is not None %}
-                        <img src={{ movie.movie_pic.url }} height="220"> <br>
-                    {% endif %}
-                    <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
-                    <p>Predicted Rating: {{ rating.predicted_rating }}
+            {% if learner.learning_style == "GLB" %} {# present the movies in columns if the learning style is global and as list otherwise #}
+                <ul style="columns: 3">
+                {% for movie, rating in list_recommended_movies %}
+                    <li>
+                        {%  if movie.movie_pic.url is not None %}
+                            <img src={{ movie.movie_pic.url }} height="220"> <br>
+                        {% endif %}
+                        <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+                        <p>Predicted Rating: {{ rating.predicted_rating }}
 
-                    <div class="rating">
-                          <label>
-                            <input type="radio" name={{ movie.id }} value="1" />
-                            <span class="icon">★</span>
-                          </label>
-                          <label>
-                            <input type="radio" name={{ movie.id }} value="2" />
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                          </label>
-                          <label>
-                            <input type="radio" name={{ movie.id }} value="3" />
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                          </label>
-                          <label>
-                            <input type="radio" name={{ movie.id }} value="4" />
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                          </label>
-                          <label>
-                            <input type="radio" name={{ movie.id }} value="5" />
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                            <span class="icon">★</span>
-                          </label>
-                    </div> </p>
-                </li>
-            {% endfor %}
-            </ul>
+                        <div class="rating">
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="1" />
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="2" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="3" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="4" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="5" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                        </div> </p>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <ul>
+                {% for movie, rating in list_recommended_movies %}
+                    <li>
+                        {%  if movie.movie_pic.url is not None %}
+                            <img src={{ movie.movie_pic.url }} height="220"> <br>
+                        {% endif %}
+                        <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+                        <p>Predicted Rating: {{ rating.predicted_rating }}
+
+                        <div class="rating">
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="1" />
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="2" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="3" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="4" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name={{ movie.id }} value="5" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                        </div> </p>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
     </div>
     <input type="submit" value="Rate Movies!" />
     </form>
@@ -162,17 +209,31 @@ window.onload = getLocation();
 <h1>List of Seen Movies</h1>
 {% if list_seen_movies %}
     <div style="width: 100%; height:600px; overflow: auto">
-        <ul>
-        {% for movie, rating in list_seen_movies %}
-            <li>
-               {%  if movie.movie_pic.url is not None %}
-                        <img src={{ movie.movie_pic.url }} height="220"> <br>
-                    {% endif %}
-                <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
-                <p>Rating: {{ rating.rating }}</p>
-            </li>
-        {% endfor %}
-        </ul>
+        {% if learner.learning_style == "GLB" %}
+            <ul style="columns: 3">
+            {% for movie, rating in list_seen_movies %}
+                <li>
+                   {%  if movie.movie_pic.url is not None %}
+                            <img src={{ movie.movie_pic.url }} height="220"> <br>
+                        {% endif %}
+                    <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+                    <p>Rating: {{ rating.rating }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <ul>
+            {% for movie, rating in list_seen_movies %}
+                <li>
+                   {%  if movie.movie_pic.url is not None %}
+                            <img src={{ movie.movie_pic.url }} height="220"> <br>
+                        {% endif %}
+                    <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+                    <p>Rating: {{ rating.rating }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 {% else %}
     <p>No movies are available.</p>
