@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from time import strftime
@@ -22,7 +23,7 @@ class Learner(models.Model):
 
     LEVELS_OF_EDUCATION_CHOICES = (
         (FUNDAMENTAL, "Ensino Fundamental"),
-        (MEDIO, "Ensino Medio"),
+        (MEDIO, "Ensino Médio"),
         (SUPERIOR, "Ensino Superior"),
         (MESTRE, "Mestrado"),
         (PHD, "Doutorado"),
@@ -38,7 +39,7 @@ class Learner(models.Model):
 
     LEVELS_OF_KNOWLEDGE_CHOICES = (
         (LOW, "Baixo"),
-        (MEDIUM, "Medio"),
+        (MEDIUM, "Médio"),
         (HIGH, "Alto"),
     )
 
@@ -72,7 +73,7 @@ class Learner(models.Model):
 
     LEARNING_GOAL_CHOICES = (
         (SHORT_TERM, "Aprendizagem a curto prazo"),
-        (LIFE_LONG, "Aprendizagem vitalicia"),
+        (LIFE_LONG, "Aprendizagem vitalícia"),
     )
 
     learning_goal = models.CharField(max_length=3,
@@ -122,12 +123,12 @@ class Movie(models.Model):
     MATH = "MT"
 
     KNOWLEDGE_AREA_CHOICES = (
-        (ENGLISH, "Ingles"),
+        (ENGLISH, "Inglês"),
         (LITERATURE, "Literatura"),
-        (HISTORY, "Historia"),
+        (HISTORY, "História"),
         (BIOLOGY, "Biologia"),
-        (PHYSICS, "Fisica"),
-        (MATH, "Matematica"),
+        (PHYSICS, "Física"),
+        (MATH, "Matemática"),
     )
     movie_knowledge_area = models.CharField(max_length=2,
                                             choices=KNOWLEDGE_AREA_CHOICES, null=True, blank=True)

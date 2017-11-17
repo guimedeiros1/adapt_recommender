@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import random
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
