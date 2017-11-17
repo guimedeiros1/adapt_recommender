@@ -98,7 +98,7 @@ class Learner(models.Model):
     learning_style = models.CharField(max_length=3,
                                       choices=LEARNING_STYLE_CHOICES,
                                       help_text=""""Aprendizagem sequencial = aprende linearmente (ex. le um livro na sequencia capitulo 1,2,3...)
-                                                    Aprendizagem global = aprende pulando conteúdo (ex. le o livro em ordem randomica cap. 1,5,3,9...)""",
+                                                    Aprendizagem global = aprende pulando conteudo (ex. le o livro em ordem randomica cap. 1,5,3,9...)""",
                                       null=True, blank=True,
                                       )
     def __str__(self):
