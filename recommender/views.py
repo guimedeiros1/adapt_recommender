@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+# import os
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ALGORITHMS = os.path.join(BASE_DIR, '/recommender/algorithms')
+#
+# import sys
+# sys.path.insert(0, ALGORITHMS)
+
 import random
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -6,10 +13,10 @@ from django.shortcuts import render
 from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from adapt_recommender.recommender.algorithms.populate_bd import PopulateBd
-from adapt_recommender.recommender.algorithms.content_similarity import ContentSimilarity
+from .algorithms.populate_bd import PopulateBd
+from .algorithms.content_similarity import ContentSimilarity
 from django.db import IntegrityError
-from adapt_recommender.recommender.algorithms.sgd import FactMatrix
+from .algorithms.sgd import FactMatrix
 
 from .models import Movie, Learner, Rating, User
 
