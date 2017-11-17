@@ -6,10 +6,10 @@ from django.shortcuts import render
 from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from .algorithms.populate_bd import PopulateBd
-from .algorithms.content_similarity import ContentSimilarity
+from adapt_recommender.recommender.algorithms.populate_bd import PopulateBd
+from adapt_recommender.recommender.algorithms.content_similarity import ContentSimilarity
 from django.db import IntegrityError
-from .algorithms.sgd import FactMatrix
+from adapt_recommender.recommender.algorithms.sgd import FactMatrix
 
 from .models import Movie, Learner, Rating, User
 
