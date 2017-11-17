@@ -22,7 +22,7 @@ class Learner(models.Model):
 
     LEVELS_OF_EDUCATION_CHOICES = (
         (FUNDAMENTAL, "Ensino Fundamental"),
-        (MEDIO, "Ensino Médio"),
+        (MEDIO, "Ensino Medio"),
         (SUPERIOR, "Ensino Superior"),
         (MESTRE, "Mestrado"),
         (PHD, "Doutorado"),
@@ -38,7 +38,7 @@ class Learner(models.Model):
 
     LEVELS_OF_KNOWLEDGE_CHOICES = (
         (LOW, "Baixo"),
-        (MEDIUM, "Médio"),
+        (MEDIUM, "Medio"),
         (HIGH, "Alto"),
     )
 
@@ -72,13 +72,13 @@ class Learner(models.Model):
 
     LEARNING_GOAL_CHOICES = (
         (SHORT_TERM, "Aprendizagem a curto prazo"),
-        (LIFE_LONG, "Aprendizagem vitalícia"),
+        (LIFE_LONG, "Aprendizagem vitalicia"),
     )
 
     learning_goal = models.CharField(max_length=3,
                                      choices=LEARNING_GOAL_CHOICES,
-                                     help_text="""'Aprendizagem a curto prazo' = aprender sobre um tópico específico;
-                                               'Aprendizagem vitalícia' = aprender mais sobre uma matéria;""",
+                                     help_text="""'Aprendizagem a curto prazo' = aprender sobre um topico especifico;
+                                               'Aprendizagem vitalicia' = aprender mais sobre uma materia;""",
                                      null=True, blank=True,
                                      )
 
@@ -97,8 +97,8 @@ class Learner(models.Model):
 
     learning_style = models.CharField(max_length=3,
                                       choices=LEARNING_STYLE_CHOICES,
-                                      help_text=""""Aprendizagem sequencial = aprende linearmente (ex. lê um livro na sequência capítulo 1,2,3...)
-                                                    Aprendizagem global = aprende pulando conteúdo (ex. lê o livro em ordem randômica cap. 1,5,3,9...)""",
+                                      help_text=""""Aprendizagem sequencial = aprende linearmente (ex. le um livro na sequencia capitulo 1,2,3...)
+                                                    Aprendizagem global = aprende pulando conteúdo (ex. le o livro em ordem randomica cap. 1,5,3,9...)""",
                                       null=True, blank=True,
                                       )
     def __str__(self):
@@ -122,12 +122,12 @@ class Movie(models.Model):
     MATH = "MT"
 
     KNOWLEDGE_AREA_CHOICES = (
-        (ENGLISH, "Inglês"),
+        (ENGLISH, "Ingles"),
         (LITERATURE, "Literatura"),
-        (HISTORY, "História"),
+        (HISTORY, "Historia"),
         (BIOLOGY, "Biologia"),
-        (PHYSICS, "Física"),
-        (MATH, "Matémática"),
+        (PHYSICS, "Fisica"),
+        (MATH, "Matematica"),
     )
     movie_knowledge_area = models.CharField(max_length=2,
                                             choices=KNOWLEDGE_AREA_CHOICES, null=True, blank=True)
