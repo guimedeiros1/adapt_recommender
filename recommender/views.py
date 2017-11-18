@@ -13,10 +13,10 @@ from django.shortcuts import render
 from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from .algorithms.populate_bd import PopulateBd
-from .algorithms.content_similarity import ContentSimilarity
+from .algorithms import populate_bd
+from .algorithms import content_similarity
 from django.db import IntegrityError
-from .algorithms.sgd import FactMatrix
+from .algorithms import sgd
 
 from .models import Movie, Learner, Rating, User
 
@@ -24,7 +24,7 @@ from .models import Movie, Learner, Rating, User
 # @login_required
 def index(request):
     if Movie.objects.all() is None:
-        PopulateBd.populate_bd()
+        populate_bd.PopulateBd.populate_bd()
         return HttpResponse("Populou!")
     movies = Movie.objects.order_by("movie_name")
     context = {'movie_list' : movies}
@@ -134,7 +134,7 @@ def get_ratings(request, learner_id):
     return render(request, 'recommender/populate_ratings.html', context)
 
 def populate_ratings(request, learner_id): #proposta de melhoria -> atualizar somente as notas do aprendiz de interesse (learner_id)
-    fm = FactMatrix()
+    fm = sgd.FactMatrix()
     R_hat = fm.sgd()
     usr = int(learner_id)
 
@@ -162,7 +162,7 @@ def populate_ratings(request, learner_id): #proposta de melhoria -> atualizar so
 @login_required
 def movie_detail(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
-    ls = ContentSimilarity()
+    ls = content_similarity.ContentSimilarity()
     list_similar_movies = ls.content_similarity(movie_id)
     context = {'movie' : movie,
                'list_similar_movies' : list_similar_movies}
