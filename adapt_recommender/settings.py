@@ -25,7 +25,7 @@ SECRET_KEY = 'kih*43s=*q&ew(nrqtcdbwuapgjs01azu=n1obm)i#xk5o+zov'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['adaptive-recommendation.herokuapp.com/']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
