@@ -108,11 +108,11 @@ class Learner(models.Model):
 
 class Movie(models.Model):
     movie_name = models.CharField(max_length=200)
-    movie_description = models.TextField(max_length=2000)
-    rationale = models.TextField(max_length=2000, null=True, blank=True)
-    benefits = models.TextField(max_length=2000, null=True, blank=True)
-    problems = models.TextField(max_length=2000, null=True, blank=True)
-    objectives = models.TextField(max_length=2000, null=True, blank=True)
+    movie_description = models.TextField(max_length=3000)
+    rationale = models.TextField(max_length=3000, null=True, blank=True)
+    benefits = models.TextField(max_length=3000, null=True, blank=True)
+    problems = models.TextField(max_length=3000, null=True, blank=True)
+    objectives = models.TextField(max_length=3000, null=True, blank=True)
     movie_pic = models.ImageField(upload_to='pics/', null=True, blank=True)
 
     ENGLISH = "EN"
