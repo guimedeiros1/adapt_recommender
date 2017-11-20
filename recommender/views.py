@@ -24,7 +24,8 @@ from .models import Movie, Learner, Rating, User
 # @login_required
 def index(request):
     if Movie.objects.all().count() == 0:
-        PopulateBd()
+        pop = PopulateBd()
+        pop.populate_bd()
         return HttpResponse("Populou!")
     movies = Movie.objects.order_by("movie_name")
     context = {'movie_list' : movies}
