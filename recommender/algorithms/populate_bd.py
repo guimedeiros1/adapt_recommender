@@ -7,7 +7,7 @@ import os
 
 class PopulateBd:
 
-    def populate_bd():
+    def populate_bd(self):
         directory = os.path.abspath(os.path.join("..", os.path.dirname(__file__)))
         movies = pd.read_csv(directory+'/data/movies.csv', quotechar='"', names=["url", "description", "rationale", "benefits", "problems", "objectives", "content", "title"])
 
@@ -19,5 +19,5 @@ class PopulateBd:
             item.objectives = mv.objectives
             item.save()
 
-    def __call__():
+    def __call__(self):
         print("Database populated!")
