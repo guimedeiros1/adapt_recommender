@@ -9,7 +9,7 @@ from django.http import HttpResponse
 class PopulateBd:
 
     def populate_bd(self):
-        directory = os.path.abspath(os.path.join("..", os.path.dirname(__file__)))
+        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
         movies = pd.read_csv(directory+'/data/movies.csv', quotechar='"', names=["url", "description", "rationale", "benefits", "problems", "objectives", "content", "title"])
 
         for mv in movies.itertuples():
