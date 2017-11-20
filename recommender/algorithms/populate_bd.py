@@ -19,5 +19,5 @@ class PopulateBd:
             item.objectives = mv.objectives
             item.save()
 
-    def __call__(self):
-        print("Database populated!")
+    # def __call__(self):
+    #     print("Database populated!")
