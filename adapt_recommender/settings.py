@@ -192,5 +192,5 @@ if DEBUG:
     # STATICFILES_LOCATION = 'static'
     # STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 
-    MEDIAFILES_LOCATION = 'public'
-    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+    # MEDIAFILES_LOCATION = 'public'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
