@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     # 'debug_toolbar',
 ]
 
@@ -162,19 +164,33 @@ if DEBUG:
         'INTERCEPT_REDIRECTS': False,
     }
 
-    import dj_database_url
 
     db_from_env = dj_database_url.config(conn_max_age=500)
     DATABASES['default'].update(db_from_env)
 
-    # PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    #
-    # STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+
     STATIC_URL = '/static/'
-    #
-    # # Extra places for collectstatic to find static files.
-    # STATICFILES_DIRS = (
-    #     os.path.join(PROJECT_ROOT, 'static'),
-    # )
-    #
-    # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+
+    AWS_S3_OBJECT_PARAMETERS = {
+        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'CacheControl': 'max-age=94608000',
+    }
+
+    AWS_STORAGE_BUCKET_NAME = 'bucketeer-aa9f447d-e1ac-453b-ad55-091d3f796d06'
+    AWS_S3_REGION_NAME = 'us-east-1'  # e.g. us-east-2
+    AWS_ACCESS_KEY_ID = 'AKIAJFZGNEIRHAZS4V5Q'
+    AWS_SECRET_ACCESS_KEY = 'FACSogVqqR1azgb+OiDVMYyRglHryrnnEIWcUDOb'
+
+    # Tell django-storages the domain to use to refer to static files.
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+    # Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
+    # you run `collectstatic`).
+    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+
+    MEDIAFILES_LOCATION = 'public'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'

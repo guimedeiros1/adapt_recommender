@@ -191,3 +191,4 @@ xlwt==1.2.0
 zict==0.1.2
 Bottleneck==1.2.1
 numba==0.33.0
+django-storages==1.6.5
