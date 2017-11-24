@@ -169,7 +169,7 @@ if DEBUG:
     DATABASES['default'].update(db_from_env)
 
 
-    # STATIC_URL = '/static/'
+    STATIC_URL = '/static/'
 
 
     AWS_S3_OBJECT_PARAMETERS = {
