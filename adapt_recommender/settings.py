@@ -131,9 +131,9 @@ USE_TZ = True
 
 # STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+#
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 if DEBUG:
     INTERNAL_IPS = ('127.0.0.1',)
@@ -169,7 +169,7 @@ if DEBUG:
     DATABASES['default'].update(db_from_env)
 
 
-    STATIC_URL = '/static/'
+    # STATIC_URL = '/static/'
 
 
     AWS_S3_OBJECT_PARAMETERS = {
