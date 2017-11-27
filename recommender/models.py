@@ -135,7 +135,7 @@ class Movie(models.Model):
     movie_recommended_age = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return u'%s - %s' % (self.id, self.movie_name)
+        return '%s - %s' % (self.id, self.movie_name)
 
 
 class Rating(models.Model):

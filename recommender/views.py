@@ -91,14 +91,14 @@ def register_preferences(request, learner_id):
     rated_movies = list(request.POST.items())
 
     if learner_movie_set.count() == 0:
-        for key, value in rated_movies[1:]: #skip first element because it is user token information
+        for key, value in rated_movies[2:]: #skip first element because it is user token information
             rating = Rating.objects.create(learner=learner, movie=Movie.objects.get(pk=key))
             rating.rating = int(value)
             rating.save()
         url = reverse('recommendation', kwargs={'learner_id': learner_id})
         return HttpResponseRedirect(url)
     else:
-        for key, value in rated_movies[1:]:  # skip first element because it is user token information
+        for key, value in rated_movies[2:]:  # skip first element because it is user token information
             rating = Rating.objects.get(movie=key, learner=learner_id)
             rating.rating = int(value)
             rating.context_time = datetime.now()
