@@ -87,8 +87,9 @@ function getLocation() {
 }
 {#MODIFICAR ESSA FUNÇÃO PARA ENVIAR A LATITUDE E A LONGITUDE#}
 function sendPosition(position) {
-    x.innerHTML = "Latitude: " + position.coords.latitude +
-    "<br>Longitude: " + position.coords.longitude;
+{#    x.innerHTML = "Latitude: " + position.coords.latitude +#}
+{#    "<br>Longitude: " + position.coords.longitude;#}
+    break
 }
 
 window.onload = getLocation();
@@ -110,7 +111,8 @@ window.onload = getLocation();
             {% if learner.learning_style == "GLB" %} {# present the movies in columns if the learning style is global and as list otherwise #}
                 <ul style="columns: 3">
                 {% for movie, rating in list_recommended_movies %}
-                    <li>
+                    {#avoids to break the movies in between columns#}
+                    <li style="-webkit-column-break-inside: avoid; page-break-inside: avoid; display:table;">
                         {%  if movie.movie_pic.url is not None %}
                             <img src={{ movie.movie_pic.url }} height="220"> <br>
                         {% endif %}
@@ -149,7 +151,7 @@ window.onload = getLocation();
                                 <span class="icon">★</span>
                               </label>
                         </div> </p>
-                    </li>
+                    </li> <br>
                 {% endfor %}
                 </ul>
             {% else %}
@@ -212,10 +214,7 @@ window.onload = getLocation();
         {% if learner.learning_style == "GLB" %}
             <ul style="columns: 3">
             {% for movie, rating in list_seen_movies %}
-                <li>
-                   {%  if movie.movie_pic.url is not None %}
-                            <img src={{ movie.movie_pic.url }} height="220"> <br>
-                        {% endif %}
+                <li style="-webkit-column-break-inside: avoid; page-break-inside: avoid; display:table;">
                     <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
                     <p>Rating: {{ rating.rating }}</p>
                 </li>
@@ -225,9 +224,6 @@ window.onload = getLocation();
             <ul>
             {% for movie, rating in list_seen_movies %}
                 <li>
-                   {%  if movie.movie_pic.url is not None %}
-                            <img src={{ movie.movie_pic.url }} height="220"> <br>
-                        {% endif %}
                     <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
                     <p>Rating: {{ rating.rating }}</p>
                 </li>

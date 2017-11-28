@@ -51,7 +51,7 @@ class FactMatrix:
         lmbda = 0.1 # Regularisation weight
         k = 20  # Dimensionality of the latent feature space
         m, n = R.shape  # Number of users and items
-        n_epochs = 50  # Number of epochs
+        n_epochs = 100  # Number of epochs
         gamma=0.01  # Learning rate
 
         P = 3 * np.random.rand(k,m) # Latent user feature matrix
