@@ -24,9 +24,9 @@
 <ul>
     {% for movie in list_similar_movies %}
         <li>
-        {%  if movie.movie_pic.url is not None %}
-            <img src={{ movie.movie_pic.url }} height="220"> <br>
-        {% endif %}
+{#        {%  if movie.movie_pic.url is not None %}#}
+{#            <img src={{ movie.movie_pic.url }} height="220"> <br>#}
+{#        {% endif %}#}
             <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a> <br>
         </li>
     {% endfor %}
