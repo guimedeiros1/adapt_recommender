@@ -128,7 +128,7 @@ window.onload = getLocation();
 
 <h1>List of Recommended Movies</h1>
 {% if list_recommended_movies %}
-    <div style="width:100%; height:600px; overflow: auto">
+    <div style="width:100%; height:400px; overflow: auto">
         <form action="/recommender/{{ learner.id }}/register_preferences/" method="post">
             {% csrf_token %}
             {% if learner.learning_style == "GLB" %} {# present the movies in columns if the learning style is global and as list otherwise #}
@@ -233,7 +233,7 @@ window.onload = getLocation();
 
 <h1>List of Seen Movies</h1>
 {% if list_seen_movies %}
-    <div style="width: 100%; height:600px; overflow: auto">
+    <div style="width: 100%; height:200px; overflow: auto">
         {% if learner.learning_style == "GLB" %}
             <ul style="columns: 3">
             {% for movie, rating in list_seen_movies %}
@@ -257,7 +257,8 @@ window.onload = getLocation();
 {% else %}
     <p>No movies are available.</p>
 {% endif %}
-
+<h1>Survey Link</h1>
+<a href="https://goo.gl/forms/s0zBFHe4ZeMNY7Ci1">Satisfaction Survey</a>
 <br><br><br> <a href="/recommender/logout_view/">Logout</a>
 </body>
 </html>
