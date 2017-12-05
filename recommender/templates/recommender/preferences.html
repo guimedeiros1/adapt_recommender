@@ -95,10 +95,10 @@
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<h1>Please rate movies you already seen {{ user.first_name }}</h1>
+<h1>Please rate movies you might like {{ user.first_name }}</h1>
 
 <h3>Please try to vote the maximum number of movies</h3>
-<p>PS. You can always go back and forth to see the movie descriptions and vote</p>
+<p>PS. If you don't know a movie you can always check its description and vote</p>
 
 {#Get current position and sends it by an AJAX POST to register preferences view#}
 <p id="preferences"></p>
@@ -187,7 +187,7 @@ window.onload = getLocation();
         </ul>
         <input type="submit" value="Get my Recommendations!" />
     </form>
-    <button onclick="reloadPage()">Show me other movies!</button>
+{#    <button onclick="reloadPage()">Show me other movies!</button>#}
 {% else %}
     <p>No movies are available.</p>
 {% endif %}
