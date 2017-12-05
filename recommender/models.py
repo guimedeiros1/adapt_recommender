@@ -134,8 +134,9 @@ class Movie(models.Model):
                                             choices=KNOWLEDGE_AREA_CHOICES, null=True, blank=True)
     movie_recommended_age = models.IntegerField(null=True, blank=True)
 
+
     def __str__(self):
-        return '%s - %s' % (self.id, self.movie_name)
+        return '%s - %s' % (self.id, self.movie_name.encode('utf-8'))
 
 
 class Rating(models.Model):
