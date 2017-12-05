@@ -170,7 +170,7 @@ def populate_ratings(request, learner_id): #proposta de melhoria -> atualizar so
 def movie_detail(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
     ls = ContentSimilarity()
-    list_similar_movies = ls.content_similarity(movie_id)
+    list_similar_movies = ls.content_similarity(int(movie_id))
     context = {'movie' : movie,
                'list_similar_movies' : list_similar_movies}
     return render(request, 'recommender/movie_details.html', context)
