@@ -139,7 +139,7 @@ window.onload = getLocation();
                         {%  if movie.movie_pic.url is not None %}
                             <img src={{ movie.movie_pic.url }} height="220"> <br>
                         {% endif %}
-                        <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+                        <a target="_blank" href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
                         <p>Predicted Rating: {{ rating.predicted_rating }}
 
                         <div class="rating">
@@ -184,7 +184,7 @@ window.onload = getLocation();
                         {%  if movie.movie_pic.url is not None %}
                             <img src={{ movie.movie_pic.url }} height="220"> <br>
                         {% endif %}
-                        <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+                        <a target="_blank" href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
                         <p>Predicted Rating: {{ rating.predicted_rating }}
 
                         <div class="rating">
@@ -240,7 +240,7 @@ window.onload = getLocation();
             <ul style="columns: 3">
             {% for movie, rating in list_seen_movies %}
                 <li style="-webkit-column-break-inside: avoid; page-break-inside: avoid; display:table;">
-                    <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+                    <a target="_blank" href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
                     <p>Rating: {{ rating.rating }}</p>
                 </li>
             {% endfor %}
@@ -249,7 +249,7 @@ window.onload = getLocation();
             <ul>
             {% for movie, rating in list_seen_movies %}
                 <li>
-                    <a href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
+                    <a target="_blank" href="/recommender/{{ movie.id }}/movie_detail">{{ movie.movie_name }}</a>
                     <p>Rating: {{ rating.rating }}</p>
                 </li>
             {% endfor %}
@@ -261,7 +261,7 @@ window.onload = getLocation();
 {% endif %}
 <div>
     <h1>Survey Link</h1>
-    <a href="https://goo.gl/forms/s0zBFHe4ZeMNY7Ci1">Satisfaction Survey</a> <h2 style="display: inline; color: red">← Please, let us know your opinion through our quick survey</h2>
+    <a target="_blank" href="https://goo.gl/forms/s0zBFHe4ZeMNY7Ci1">Satisfaction Survey</a> <h2 style="display: inline; color: red">← Please, let us know your opinion through our quick survey</h2>
 </div>
 <br><br><br> <a href="/recommender/logout_view/">Logout</a>
 </body>
