@@ -17,6 +17,7 @@ from .algorithms.populate_bd import PopulateBd
 from .algorithms.content_similarity import ContentSimilarity
 from django.db import IntegrityError
 from .algorithms.sgd import FactMatrix
+import csv
 
 from .models import Movie, Learner, Rating, User
 
@@ -204,3 +205,19 @@ def logout_view(request):
     logout(request)
     url = reverse('login')
     return HttpResponseRedirect(url)
+
+def dumpratings(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="ratings.csv"'
+
+    writer = csv.writer(response)
+
+    #write the header
+    writer.writerow(['learner_id','movie_id','rating','predicted_rating','timestamp'])
+
+    #iterate over the objects and write in the csv
+    for obj in Rating.objects.all():
+        writer.writerow([obj.learner, obj.movie, obj.rating, obj.predicted_rating, obj.context_time])
+
+    return response

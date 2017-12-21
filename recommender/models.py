@@ -103,7 +103,7 @@ class Learner(models.Model):
                                       null=True, blank=True,
                                       )
     def __str__(self):
-        return 'User %s - Learner %s' % (self.user_fk_id, self.pk)
+        return '%s' % (self.pk) #self.user_fk_id,
 
 
 class Movie(models.Model):
@@ -136,7 +136,7 @@ class Movie(models.Model):
 
 
     def __str__(self):
-        return '%s - %s' % (self.id, self.movie_name.encode('utf-8'))
+        return '%s' % (self.id) #, self.movie_name.encode('utf-8')
 
 
 class Rating(models.Model):

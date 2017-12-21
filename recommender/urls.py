@@ -30,4 +30,6 @@ urlpatterns = [
     url(r'^(?P<learner_id>[0-9]+)/register_preferences/$', views.register_preferences, name='register_preferences'),
     # ex: /recommender/5/populate_ratings/
     url(r'^(?P<learner_id>[0-9]+)/populate_ratings/$', views.populate_ratings, name='populate_ratings'),
+    # ex: /recommender/dumpratings/
+    url(r'^dumpratings/$', views.dumpratings, name='dumpratings'),
 ]
